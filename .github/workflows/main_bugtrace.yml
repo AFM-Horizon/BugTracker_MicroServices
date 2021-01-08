@@ -21,11 +21,11 @@ jobs:
         node-version: '12.13.0'
 
     - name: npm install, build, and test
+      working-directory: ./bug-tracker-api
       run: |
         npm install
         npm run build --if-present
         npm run test --if-present
-        working-directory: ./bug-tracker-api
 
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
