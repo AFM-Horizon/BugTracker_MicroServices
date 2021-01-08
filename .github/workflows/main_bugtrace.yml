@@ -10,7 +10,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@master
@@ -18,10 +18,9 @@ jobs:
     - name: Set up Node.js version
       uses: actions/setup-node@v1
       with:
-        node-version: '12.13.0'
+        node-version: '12.x'
 
     - name: npm install, build, and test
-      working-directory: ./bug-tracker-api
       run: |
         npm install
         npm run build --if-present
@@ -32,5 +31,5 @@ jobs:
       with:
         app-name: 'bugtrace'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_4b8b3e71233d477a996253733e380b5e }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_077f1a31ca144a769bff8f24d080d6b3 }}
         package: .
