@@ -10,7 +10,7 @@ import { Workspace } from './../models/workspace';
   providedIn: 'root'
 })
 export class BugService implements OnInit {
-  private BaseUrl = 'http://localhost:3002/bugs';
+  private BaseUrl = 'https://bugtrace.azurewebsites.net/bugs';
 
   private updateAction$: BehaviorSubject<any> = new BehaviorSubject(null);
   constructor(private http: HttpClient, private workspaceStateService: WorkspaceStateService) { }
