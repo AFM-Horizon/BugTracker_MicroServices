@@ -45,7 +45,7 @@ export class TokenService {
       return throwError(new Error("No Refresh Token Available"));
     }
 
-    return this.http.post<any>('https://bugtrace.azurewebsites.net:3002/auth/token', { 
+    return this.http.post<any>('https://bugtrace.azurewebsites.net/auth/token', { 
       token: refreshToken 
     }, {headers: new HttpHeaders({skip: 'true'})}).pipe(
       map((data) => {
