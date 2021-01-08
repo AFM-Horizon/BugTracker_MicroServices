@@ -21,6 +21,7 @@ jobs:
         node-version: '12.x'
 
     - name: npm install, build, and test
+      working-directory: ./bug-tracker-api
       run: |
         npm install
         npm run build --if-present
