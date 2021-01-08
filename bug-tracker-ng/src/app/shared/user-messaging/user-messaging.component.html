@@ -1,0 +1,7 @@
+<div *ngIf="message$ | async as message">
+  <div *ngIf="message != ''" class="notification login-alert is-danger">
+    {{ message }}
+  </div>
+</div>
+
+<!-- [class]="{ 'is-success': isError===true, 'is-danger': isError===false } -->

@@ -1,24 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { AuthMessagingService } from './../auth-messaging.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-auth-flash-msg',
   templateUrl: './auth-flash-msg.component.html',
-  styleUrls: ['./auth-flash-msg.component.scss']
+  styleUrls: ['./auth-flash-msg.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AuthFlashMsgComponent implements OnInit {
-  message:string;
-  isError:boolean;
-
+export class AuthFlashMsgComponent {
+  message$ = this.authMessageService.getMessage();
   constructor(private authMessageService: AuthMessagingService) { }
-
-  ngOnInit(): void {
-    this.authMessageService.getMessage().subscribe((data) => {
-      this.message = data;
-      if(this.message === ''){
-        this.isError = false;
-      }
-    });
-  }
 }

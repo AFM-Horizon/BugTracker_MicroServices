@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { Bug } from 'src/app/models/bug';
-import { BugService } from './../../bugs/bug.service';
+import { Component, Input, OnDestroy } from '@angular/core';
+import { Tag } from 'src/app/models/tag';
+import { TagServiceService } from './../tag-service.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-color-picker',
@@ -8,10 +9,11 @@ import { BugService } from './../../bugs/bug.service';
   styleUrls: ['./color-picker.component.scss']
 })
 
-export class ColorPickerComponent {
+export class ColorPickerComponent implements OnDestroy {
   @Input() color: string;
-  @Input() bug: Bug;
+  @Input() bugId: string;
   tagName: string;
+  subscription: Subscription;
 
   public defaultColors: string[] = [
     '#000105',
@@ -38,7 +40,7 @@ export class ColorPickerComponent {
     '#c1800b'
   ];
 
-  constructor(private bugService: BugService) {}
+  constructor(private tagService: TagServiceService) { }
 
   public changeColor(color: string): void {
     this.color = color;
@@ -51,21 +53,19 @@ export class ColorPickerComponent {
       this.color = color;
     }
   }
-  
+
   createTag() {
-    const tag = {
-      name: this.tagName, 
+    const tag: Tag = {
+      name: this.tagName,
       colour: this.color
     }
 
-    this.bug.tags.push(tag);
+    this.subscription = this.tagService.addTag(this.bugId, tag).subscribe();
+  }
 
-    const updateBug = {
-      tags: this.bug.tags
-    };
-
-    this.bugService.updateBug(this.bug._id, updateBug).subscribe(() => {
-      this.bugService.updateBugData();
-    });
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

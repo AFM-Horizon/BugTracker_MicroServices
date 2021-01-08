@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { faBug, faEdit, faComment } from '@fortawesome/free-solid-svg-icons';
 import { Bug } from '../../models/bug';
-import { BugModalStateService } from '../../bug-modal-state.service';
+import { BugModalStateService } from '../../shared/bug-modal-state.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   templateUrl: './bug-card.component.html',
   styleUrls: ['./bug-card.component.scss']
 })
-export class BugCardComponent implements OnInit {
+export class BugCardComponent {
   @Input() bug: Bug;
 
   faBug = faBug;
@@ -17,9 +17,6 @@ export class BugCardComponent implements OnInit {
   faComment = faComment;
 
   constructor(private modalService: BugModalStateService, private router: Router) { }
-
-  ngOnInit(): void {
-  }
 
   setBugColour() {
     if(this.bug.status === "Created") {
@@ -34,6 +31,7 @@ export class BugCardComponent implements OnInit {
   }
 
   handleEditClick() {
+    this.modalService.setBugEditState(this.bug);
     this.modalService.openModal();
     this.router.navigate([`bugs/edit`], { state: { bugId: this.bug._id }});
   }

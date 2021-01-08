@@ -16,7 +16,6 @@ module.exports = {
   insert_comment: (req, res) => {
     const { bugId } = req.params;
     const comment = req.body;
-    // Should get the user from db and validate rather than relying on jwt maybe?
     comment.user = req.user.id;
     repository.InsertComment(bugId, comment)
       .then((commentData) => {

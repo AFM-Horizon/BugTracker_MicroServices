@@ -15,8 +15,8 @@ module.exports = (() => {
     return bugModel.save();
   }
 
-  async function _getAllBugs() {
-    return BugModel.find({ archived: false }).populate('comments.user');
+  async function _getAllBugs(workspaceId) {
+    return BugModel.find({ archived: false, workspace: workspaceId }).populate('comments.user');
   }
 
   async function _deleteCollection() {
@@ -46,8 +46,8 @@ module.exports = (() => {
     InsertSingleBug(bug) {
       return _insertSingleBug(bug);
     },
-    GetAllBugs() {
-      return _getAllBugs();
+    GetAllBugs(workspaceId) {
+      return _getAllBugs(workspaceId);
     },
     DeleteCollection() {
       return _deleteCollection();

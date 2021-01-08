@@ -1,0 +1,51 @@
+.logo {
+  max-width: 250px;
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+}
+
+.title {
+  text-align: center;
+}
+
+.fourofour {
+  font-size: 250px;
+  text-align: center;
+}
+
+.container {
+  text-align: center;
+}
+
+$size: 400px;
+
+body {
+  margin: 0;
+}
+
+img, div {
+  width: $size;
+  height: $size;
+}
+
+.x {
+  animation: x 4s linear infinite alternate;
+}
+
+.y {
+  animation: y 2.3s linear infinite alternate;
+}
+
+@keyframes x {
+  100% {
+    transform: translateX( calc(100vw - #{$size}) );
+  }
+}
+
+@keyframes y {
+  100% {
+    transform: translateY( calc(100vh - #{$size}) );
+  }
+}
+

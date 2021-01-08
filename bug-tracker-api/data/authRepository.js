@@ -15,12 +15,18 @@ module.exports = (() => {
   }
 
   async function _insertUser(user) {
-    console.log('Trouble');
     const userModel = new UserModel(user);
     return userModel.save();
   }
 
+  async function _getUserByUsername(username) {
+    return authSchema.userModel.find({ username: RegExp(`^${username}`, 'i') });
+  }
+
   return {
+    GetUserByUsername(username) {
+      return _getUserByUsername(username);
+    },
     GetUser(userQuery) {
       return _getUser(userQuery);
     },

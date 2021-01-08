@@ -27,7 +27,8 @@ describe('CommentListComponent', () => {
       _id: 'test',
       name: 'test',
       author: 'test',
-      status: 'test'
+      status: 'test',
+      workspace: 'test'
     }
     fixture = TestBed.createComponent(CommentListComponent);
     component = fixture.componentInstance;

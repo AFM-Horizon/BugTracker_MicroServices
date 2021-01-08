@@ -1,0 +1,24 @@
+<app-navbar></app-navbar>
+<div (click)="addWorkspace()" class="button">
+  Add Workspace
+</div>
+<input [(ngModel)]="workspaceName" type="text" class="input">
+
+<ul>
+  <div *ngIf="workspaces$ | async as workspaces">
+    <div *ngFor="let workspace of workspaces">
+      <a (click)="loadBugs(workspace)">
+        <li>
+          {{workspace._id}}
+          {{workspace.name}}
+          {{workspace.owner}}
+        </li>
+      </a>
+    </div>
+  </div>
+</ul>
+
+<div>
+  Add User
+</div>
+<app-user-search></app-user-search>

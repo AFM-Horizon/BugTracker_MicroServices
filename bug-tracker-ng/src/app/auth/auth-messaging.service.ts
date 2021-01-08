@@ -3,18 +3,17 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class AuthMessagingService {
-  isAnimation: boolean = true;
+  private isAnimation = new BehaviorSubject<boolean>(true);
+  isAnimation$ = this.isAnimation.asObservable();
   private message = new BehaviorSubject<string>('');
   message$ = this.message.asObservable();
 
-
-  getAnimationState(): boolean {
-    return this.isAnimation;
+  getAnimationState(): Observable<boolean> {
+    return this.isAnimation$;
   }
 
   setAnimationState(isAnimated: boolean): void {
-    console.log(isAnimated);
-    this.isAnimation = isAnimated;
+    this.isAnimation.next(isAnimated);
   }
 
   getMessage(): Observable<string> {

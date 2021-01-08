@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { AuthMessagingService } from './../auth-messaging.service';
-import { AuthService } from './../auth.service';
+import { AuthService } from '../../shared/auth.service';
+import { UserMessagingService } from './../../shared/user-messaging.service';
+import { Subscription, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login-form',
@@ -11,8 +13,9 @@ import { AuthService } from './../auth.service';
   styleUrls: ['./login-form.component.scss']
 })
 
-export class LoginFormComponent implements OnInit {
-  isAnimated: boolean;
+export class LoginFormComponent implements OnInit, OnDestroy {
+  isAnimated$: Observable<boolean>;
+  loginSubscription: Subscription;
 
   user = new FormGroup({
     username: new FormControl(),
@@ -20,14 +23,14 @@ export class LoginFormComponent implements OnInit {
   });
 
   constructor(
-    private routerActive: ActivatedRoute, 
-    private authMessagingService: AuthMessagingService, 
+    private authMessagingService: AuthMessagingService,
     private authService: AuthService,
-    private router: Router) { }
+    private router: Router,
+    private userMessagingService: UserMessagingService) { }
 
   ngOnInit(): void {
     this.setMessage('');
-    this.isAnimated = this.routerActive.snapshot.queryParams["isAnimated"];
+    this.isAnimated$ = this.authMessagingService.getAnimationState();
   }
 
   handleLogin() {
@@ -36,21 +39,29 @@ export class LoginFormComponent implements OnInit {
       password: this.user.value.password
     };
 
-    this.authService.loginUser(userObj).subscribe(
-      (res) => {
-        this.router.navigate(['bugs']);
+    this.loginSubscription = this.authService.loginUser(userObj).subscribe(
+      () => {
+        this.authMessagingService.setAnimationState(true);
+        this.router.navigate(['workspace']);
       },
       (err) => {
-        return this.setMessage("Wrong Username Or Password");
-      } 
+        this.resetForm();
+        if (err.status == 401) {
+          return this.setMessage("Wrong Username Or Password");
+        }
+        else {
+          return this.setMessage("");
+        }
+      }
     );
   }
 
   resetForm() {
-    this.user = undefined;
+    this.user.reset();
   };
 
   resetMessage() {
+    this.userMessagingService.clearMessage();
     this.authMessagingService.setMessage('');
   };
 
@@ -59,6 +70,13 @@ export class LoginFormComponent implements OnInit {
   };
 
   emitAnimationData() {
-    this.authMessagingService.setAnimationState(this.isAnimated);
+    this.authMessagingService.setAnimationState(false);
+    this.router.navigate(['/auth/register']);
   };
+
+  ngOnDestroy(): void {
+    if (this.loginSubscription) {
+      this.loginSubscription.unsubscribe();
+    }
+  }
 }

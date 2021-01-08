@@ -8,7 +8,7 @@
         Description
       </label>
       <div class="control">
-        <div *ngIf="!isEdit">{{bug.description}}</div>
+        <div id="description" *ngIf="!isEdit">{{bug.description}}</div>
         <textarea (blur)="saveDesc()" *ngIf="isEdit" [(ngModel)]="bug.description" class="textarea"></textarea>
       </div>
     </div>

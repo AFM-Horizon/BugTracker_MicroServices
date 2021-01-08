@@ -1,25 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-import { LoginComponent } from './auth/login/login.component';
-import { LoginFormComponent } from './auth/login-form/login-form.component';
-import { RegisterFormComponent } from './auth/register-form/register-form.component';
-import { BugComponent } from './bugs/bug/bug.component';
-import { BugModalComponent } from './bugs/bug-modal/bug-modal.component';
-
 import { AuthRouteGuardGuard } from './auth-route-guard.guard';
-import { AuthLoginGuard } from './auth-login.guard';
+import { ErrorComponent } from '../app/shared/error/error.component';
 
 const routes: Routes = [
-  { path: 'auth', component: LoginComponent, 
-    children: [
-      { path: 'login', component: LoginFormComponent},
-      { path: 'register', component: RegisterFormComponent },
-  ]},
-  { path: 'bugs', component: BugComponent, canActivate: [AuthRouteGuardGuard], children: [
-    { path: 'edit', component: BugModalComponent }
-  ] },
-  { path: '', redirectTo: '/auth/login', pathMatch: 'full' }
+  { path: 'auth', loadChildren: () => import('../app/auth/auth.module').then(m => m.AuthModule) },
+  {
+    path: 'bugs', canActivate: [AuthRouteGuardGuard],
+    loadChildren: () => import('../app/bugs/bugs.module').then(m => m.BugsModule)
+  },
+  { path: 'workspace', loadChildren: () => import('../app/workspace/workspace.module').then(m => m.WorkspaceModule) },
+  { path: '404', component: ErrorComponent },
+  { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
+  { path: '**', redirectTo: '404' }
 ];
 
 @NgModule({

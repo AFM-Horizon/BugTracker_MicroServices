@@ -1,7 +1,7 @@
 <div class="login-container">
   <img src="../../assets/img/BugtraceLogo.gif" class="level-left blur-anim" />
   <img src="../../assets/img/transparentBug.png" class="logo logo-animation blur-anim" />
-  <div [class]="{ 'fade-in-anim' : isAnimated, 'start-opaque' : isAnimated, 'blur-short-anim' : !isAnimated}">
+  <div [class]="{ 'fade-in-anim' : (isAnimated$ | async), 'start-opaque' : (isAnimated$ | async), 'blur-short-anim' : (!isAnimated$ | async)}">
     <router-outlet></router-outlet>
   </div>
   <app-auth-flash-msg></app-auth-flash-msg>

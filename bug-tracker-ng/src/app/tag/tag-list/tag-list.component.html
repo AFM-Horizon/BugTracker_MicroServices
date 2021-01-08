@@ -1,0 +1,7 @@
+<div class="tags">
+    <span *ngFor="let tag of bug.tags">
+      <span class="mx-1 tag" [ngStyle]="{ background: tag.colour }">{{tag.name}}
+        <a (click)="deleteTag(tag._id)" class="delete is-small tag-close"></a>
+      </span>
+    </span>
+</div>

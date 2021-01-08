@@ -1,32 +1,36 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { faFile, faPaperclip, faComment } from '@fortawesome/free-solid-svg-icons';
 import { CommentService } from './../comment.service';
 import { UserService } from './../../shared/user.service';
 import { CommentRequest } from './../../models/commentRequestModel';
-import { BugService } from './../../bugs/bug.service';
+import { BugService } from '../../shared/bug.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-comment-entry',
   templateUrl: './comment-entry.component.html',
   styleUrls: ['./comment-entry.component.scss']
 })
-export class CommentEntryComponent implements OnInit {
+export class CommentEntryComponent implements OnInit, OnDestroy {
   @Input() bugId: string;
   controlsVisible: boolean = false;
   comment: string;
   hasText: boolean = false;
   userId: string;
+  subscriptions: Subscription[] = [];
 
   faFile = faFile;
   faPaperclip = faPaperclip;
   faComment = faComment;
 
   constructor(private commentService: CommentService, private userService: UserService, private bugService: BugService) { }
-
+  
   ngOnInit(): void {
-    this.userService.getUser().subscribe((user) => {
-      this.userId = user.id;
-    })
+    this.subscriptions.push(
+      this.userService.getUser().subscribe((user) => {
+        this.userId = user.id;
+      })
+    );
   }
 
   showControls() {
@@ -35,6 +39,7 @@ export class CommentEntryComponent implements OnInit {
 
   hideControls() {
     this.controlsVisible = false;
+    this.comment = '';
   }
 
   saveComment() {
@@ -46,7 +51,9 @@ export class CommentEntryComponent implements OnInit {
       user: this.userId
     };
 
-    this.commentService.addComment(this.bugId, comment).subscribe();
+    this.subscriptions.push(
+      this.commentService.addComment(this.bugId, comment).subscribe()
+    );
     this.bugService.updateBugData();
     this.comment = '';
   }
@@ -56,5 +63,13 @@ export class CommentEntryComponent implements OnInit {
       return true;
     }
     return this.comment.trim().length === 0;
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    });
   }
 }

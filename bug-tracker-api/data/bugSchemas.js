@@ -10,8 +10,9 @@ const tagSchema = new mongoose.Schema({
 
 const bugSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  author: { type: String, required: true },
+  author: { type: mongoose.Schema.Types.ObjectId, ref: 'users' },
   status: { type: String, required: true },
+  workspace: { type: mongoose.Schema.Types.ObjectId, ref: 'workspace' },
   description: { type: String },
   tags: [tagSchema],
   date: { type: Date, default: Date.now() },

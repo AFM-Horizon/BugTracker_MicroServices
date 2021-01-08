@@ -3,6 +3,7 @@ const chaiHttp = require('chai-http');
 const server = require('../app');
 const seedData = require('../data/seedUserData');
 const tokenRepo = require('../data/tokenRepository');
+const authRepository = require('../data/authRepository');
 
 const should = chai.should();
 
@@ -10,6 +11,7 @@ chai.use(chaiHttp);
 
 describe('AUTH TESTS', () => {
   beforeEach(async () => {
+    await authRepository.DeleteCollection();
     await tokenRepo.DeleteCollection();
     await seedData.seed();
   });
@@ -48,24 +50,33 @@ describe('AUTH TESTS', () => {
     it('Should Return Refresh Token', () => {
       chai
         .request(server)
-        .post('/auth/login')
+        .post('/auth/register')
         .send({
           username: 'Charmander',
           password: 'password'
         })
-        .end((_error, result) => {
+        .end(() => {
           chai
             .request(server)
-            .post('/auth/token')
+            .post('/auth/login')
             .send({
-              token: result.body.refreshToken
+              username: 'Charmander',
+              password: 'password'
             })
-            .end((err, res) => {
-              should.not.exist(err);
-              res.redirects.length.should.eql(0);
-              res.status.should.eql(200);
-              res.type.should.eql('application/json');
-              res.body.accessToken.should.not.eql(null);
+            .end((_error, result) => {
+              chai
+                .request(server)
+                .post('/auth/token')
+                .send({
+                  token: result.body.refreshToken
+                })
+                .end((err, res) => {
+                  should.not.exist(err);
+                  res.redirects.length.should.eql(0);
+                  res.status.should.eql(200);
+                  res.type.should.eql('application/json');
+                  res.body.accessToken.should.not.eql(null);
+                });
             });
         });
     });

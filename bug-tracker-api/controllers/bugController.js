@@ -3,7 +3,7 @@ const repository = require('../data/bugRepository');
 module.exports = {
   get_all_bugs: (req, res) => {
     repository
-      .GetAllBugs()
+      .GetAllBugs(req.params.workspaceId)
       .then((bugs) => {
         res.status(200).send(bugs);
       })
@@ -17,17 +17,6 @@ module.exports = {
       .GetBugByID(req.params.id)
       .then((bug) => {
         res.status(200).json(bug);
-      })
-      .catch((err) => {
-        res.status(500).send({ error: err });
-      });
-  },
-
-  add_tag: (req, res) => {
-    repository
-      .AddTag(req.body.id, req.body.tag)
-      .then((tag) => {
-        res.status(201).send(tag);
       })
       .catch((err) => {
         res.status(500).send({ error: err });

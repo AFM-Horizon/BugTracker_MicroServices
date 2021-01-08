@@ -3,12 +3,13 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } fro
 import { Observable, of } from 'rxjs';
 import { TokenService } from './shared/token.service';
 import { map, catchError } from 'rxjs/operators';
+import { UserMessagingService } from './shared/user-messaging.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthRouteGuardGuard implements CanActivate {
-  constructor(private tokenService: TokenService) {}
+  constructor(private tokenService: TokenService, private userMsgService: UserMessagingService) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -20,6 +21,7 @@ export class AuthRouteGuardGuard implements CanActivate {
           return true;
         }),
         catchError(() => {
+          this.userMsgService.setMessage('We could not verify your identity, please log in again');
           return of(false);
         })
       )

@@ -8,10 +8,18 @@
   background: rgba(0, 0, 0, .2);
 }
 
+.column {
+  margin-top: 10px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
 .notification {
-  padding: 8px;
+  padding: 6px;
   font-size: small;
   font-weight: bold;
+  border-radius: 4px 4px 0px 0px;
+  margin-bottom: 0px;
 }
 
 .container {

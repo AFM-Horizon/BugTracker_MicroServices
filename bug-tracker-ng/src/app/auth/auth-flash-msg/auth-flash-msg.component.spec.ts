@@ -29,4 +29,13 @@ describe('AuthFlashMsgComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should get message', () => {
+    expect(mockAuthMessagingService.getMessage).toHaveBeenCalledTimes(1);
+  });
+
+  it('should show message', () => {
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('div')).toBeTruthy();
+  })
 });

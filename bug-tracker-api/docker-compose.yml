@@ -11,6 +11,9 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     command: npm start
+    environment: 
+      - ACCESS_TOKEN_SECRET=5987dc4e657d196456e4ae0104e2a310247ed035e5dd1d38e58c16cab87b7c3d72bbcdd85de0f7af83876118d4a40de32d24db9b3dfd59f758e0bcd4f5e6591e
+      - REFRESH_TOKEN_SECRET=921bffa34c9b154201c755886d47d128c7b2382adaca64419174b18130c20e8b4bd287f36b443f44e14b7c8b5c5b7d2fce98ca62f1a905fdfbc29926ab366f84
   mongo:
     image: mongo:latest
     ports:

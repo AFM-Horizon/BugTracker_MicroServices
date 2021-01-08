@@ -4,7 +4,7 @@
   "description": "Bug Tracker",
   "main": "app.js",
   "scripts": {
-    "test": "set CONNECTION=mongodb://localhost:27017/testDB&& mocha test --exit",
+    "test": "",
     "start": "nodemon server.js",
     "old": "docker-compose up -d && set CONNECTION=mongodb://localhost:30000/bugDB&& nodemon server.js"
   },
@@ -14,6 +14,7 @@
   "author": "Node Kings (Alex)",
   "license": "ISC",
   "dependencies": {
+    "babel-eslint": "^10.1.0",
     "bcryptjs": "^2.4.3",
     "chroma-log": "^3.1.0",
     "cors": "^2.8.5",
@@ -23,7 +24,9 @@
     "express-session": "^1.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.7",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "swagger-jsdoc": "^6.0.0-rc.3",
+    "swagger-ui-express": "^4.1.5"
   },
   "devDependencies": {
     "chai": "^4.2.0",

@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { faList } from '@fortawesome/free-solid-svg-icons';
 import { Bug } from 'src/app/models/bug';
-import { BugService } from '../bug.service';
+import { BugService } from '../../shared/bug.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -11,9 +11,9 @@ import { Subscription } from 'rxjs';
 })
 export class BugDescComponent implements OnDestroy {
   @Input() bug: Bug;
-  updateBug: Subscription;
   isEdit: boolean = false;
   faList = faList;
+  updateBug: Subscription;
 
   constructor(private bugService: BugService) { }
 
@@ -25,6 +25,7 @@ export class BugDescComponent implements OnDestroy {
     this.isEdit = false;
     if(this.bug.description.trim().length == 0) {
       this.bug.description = 'Enter description here...';
+      return;
     }
     const update = {
       description: this.bug.description

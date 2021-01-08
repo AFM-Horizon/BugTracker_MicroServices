@@ -1,6 +1,6 @@
 <div [class]="{'modal-open-blur': modalOpen$ | async, 'modal-close-blur': (modalOpen$ | async) === false}">
     <div *ngIf="user$ | async as user">
-      <app-navbar [username]="user.username"></app-navbar>
+      <app-navbar></app-navbar>
       <div id="main">
         <div cdkDropListGroup class="columns" id="containerGroup">
           <div class="column">
@@ -47,5 +47,4 @@
       </div>
     </div> 
   </div>
-
   <router-outlet></router-outlet>

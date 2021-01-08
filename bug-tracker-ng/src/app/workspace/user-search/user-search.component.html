@@ -1,0 +1,6 @@
+<input id="search" type="text" class="input">
+<div *ngIf="users$ | async as users">
+  <div *ngFor="let user of users">
+    {{user.username}}
+  </div>
+</div>

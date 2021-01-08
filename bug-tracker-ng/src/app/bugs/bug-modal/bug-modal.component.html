@@ -1,5 +1,5 @@
 <div *ngIf="bug$ | async as bug" class="modal is-active">
-  <div class="modal-background"></div>
+  <div (click)="closeModal()" class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head">
       <app-bug-title [bug]="bug"></app-bug-title>
@@ -22,7 +22,7 @@
       </div>
       <hr />
       <div class="block">
-        <app-tags [tags]="bug.tags" [bug]="bug"></app-tags>
+        <app-tags [bug]="bug" [isEntry]="true"></app-tags>
       </div>
       <app-bug-desc [bug]="bug"></app-bug-desc>
       <br>
@@ -33,7 +33,7 @@
         <div class="level-right">{{bug.date | date}}</div>
       </div>
       <div class="level">
-        <button class="button is-danger">Archive</button>
+        <button (click)="handleArchiveClick()" class="button is-danger">Archive</button>
       </div>
     </section>
   </div>

@@ -1,6 +1,12 @@
 <div class="tags">
-  <span *ngFor="let tag of tags">
-    <span class="mx-1 tag" [ngStyle]="{ background: tag.colour }">{{tag.name}}</span>
-  </span>
-  <app-tag-entry [bug]="bug"></app-tag-entry>
+  <div *ngIf="tags$ | async as tags">
+    <span *ngFor="let tag of tags">
+      <span class="mx-1 tag" [ngStyle]="{ background: tag.colour }">{{tag.name}}
+        <a (click)="deleteTag(tag._id)" class="delete is-small tag-close"></a>
+      </span>
+    </span>
+    <div *ngIf="isEntry">
+      <app-tag-entry [bugId]="bug._id"></app-tag-entry>
+    </div>
+  </div>
 </div>

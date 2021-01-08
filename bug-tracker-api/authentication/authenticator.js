@@ -21,12 +21,12 @@ module.exports = {
                 }
               })
               .catch((err) => {
-                reject(err);
+                return reject(err);
               });
           }
         })
         .catch((err) => {
-          reject(err);
+          return reject(err);
         });
     };
     return new Promise(prom);
