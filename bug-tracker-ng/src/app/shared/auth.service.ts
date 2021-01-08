@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 @Injectable()
 
 export class AuthService {
-  private BaseUrl = 'https://bugtrace.azurewebsites.net/auth';
+  private BaseUrl = 'https://bugtrace.azurewebsites.net:3002/auth';
   
   constructor(
     private http: HttpClient, 
