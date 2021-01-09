@@ -43,7 +43,9 @@ app.get('/api-json', (req, res) => {
   res.send(specs);
 });
 
-app.listen(process.env.PORT || 3002, () => {
+const port = process.env.PORT || 3002;
+
+app.listen(port, () => {
   // eslint-disable-next-line no-console
-  console.log('Listening on port 3002');
+  console.log(`Listening on port ${port}`);
 });
