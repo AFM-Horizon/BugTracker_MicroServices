@@ -56,9 +56,14 @@ module.exports = {
         tokenRepo.DeleteTokenByUserId(user.id);
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
-        tokenRepo.InsertToken({ token: refreshToken, userId: user.id });
-        res.status(200);
-        res.json({ accessToken, refreshToken });
+        tokenRepo.InsertToken({ token: refreshToken, userId: user.id })
+          .then(() => {
+            res.status(200);
+            res.json({ accessToken, refreshToken });
+          })
+          .catch((err) => {
+            res.status(401).send({ error: `token is not being tracked ${err}` });
+          });
       })
       .catch((err) => {
         res.status(401).send({ error: err });

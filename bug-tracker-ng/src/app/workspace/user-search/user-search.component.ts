@@ -3,6 +3,7 @@ import { fromEvent, Observable, of } from 'rxjs';
 import { debounce, debounceTime, distinctUntilChanged, map, mergeMap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { User } from './../../models/user';
+import { ConfigService } from './../../shared/config.service';
 
 @Component({
   selector: 'app-user-search',
@@ -12,7 +13,7 @@ import { User } from './../../models/user';
 export class UserSearchComponent implements OnInit {
   users$: Observable<User[]>
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private config: ConfigService) { }
 
   ngOnInit(): void {
     this.users$ = fromEvent(document.getElementById('search'), 'keyup')
@@ -26,7 +27,7 @@ export class UserSearchComponent implements OnInit {
       mergeMap((value) => {
         const filteredVal = value.replace(/[^0-9a-z]/gi, '');
         if (filteredVal && filteredVal.trim().length !== 0) {
-          return this.http.get<User[]>(`http://localhost:3002/auth/search/${value}`)
+          return this.http.get<User[]>(`${this.config.getAPIConnectionBaseUrl()}/auth/search/${value}`)
         }
         return of([]);
       })
