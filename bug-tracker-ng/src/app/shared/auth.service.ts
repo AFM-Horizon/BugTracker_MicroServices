@@ -7,16 +7,18 @@ import { TokenResponse } from '../models/tokenResponse';
 import { LocalStorageService } from './local-storage.service';
 import { TokenService } from './token.service';
 import { Router } from '@angular/router';
+import { ConfigService } from './config.service';
 
 @Injectable()
 
 export class AuthService {
-  private BaseUrl = 'https://bugtrace.azurewebsites.net/auth';
+  private BaseUrl = `${this.config.getAPIConnectionBaseUrl()}/auth`;
   constructor(
     private http: HttpClient, 
     private localStorageService: LocalStorageService, 
     private tokenService: TokenService,
-    private router: Router) { }
+    private router: Router,
+    private config: ConfigService) { }
 
   getAuthHeader(): Observable<any> {
     return this.tokenService.getAccessToken()

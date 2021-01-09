@@ -7,7 +7,9 @@
       <fa-icon [icon]="faHome" class="fa-2x"></fa-icon>
     </a>
     <a class="navbar-item ml-4 workspace" [routerLink]="['/workspace']">
-      <div>{{(workspace$ | async).name}}</div>
+      <div *ngIf="workspace$ | async as workspace">
+        <div>{{workspace.name}}</div>
+      </div>
     </a>
     <a
       role="button"

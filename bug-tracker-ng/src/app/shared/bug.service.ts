@@ -5,15 +5,16 @@ import { HttpClient } from '@angular/common/http';
 import { switchMap, mergeMap, tap } from 'rxjs/operators';
 import { WorkspaceStateService } from './workspace-state.service';
 import { Workspace } from './../models/workspace';
+import { ConfigService } from './config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BugService implements OnInit {
-  private BaseUrl = 'https://bugtrace.azurewebsites.net/bugs';
+  private BaseUrl = `${this.config.getAPIConnectionBaseUrl()}/bugs`;
 
   private updateAction$: BehaviorSubject<any> = new BehaviorSubject(null);
-  constructor(private http: HttpClient, private workspaceStateService: WorkspaceStateService) { }
+  constructor(private http: HttpClient, private workspaceStateService: WorkspaceStateService, private config: ConfigService) { }
 
   ngOnInit(): void {
     console.log("Bug Componente");

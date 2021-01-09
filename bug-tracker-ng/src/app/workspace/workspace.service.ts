@@ -2,13 +2,14 @@ import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Workspace } from './../models/workspace';
+import { ConfigService } from './../shared/config.service';
 
 @Injectable()
 export class WorkspaceService {
-  private BaseUrl = 'http://localhost:3002/workspaces';
+  private BaseUrl = `${this.config.getAPIConnectionBaseUrl()}/workspaces`;
   workspaceSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private config: ConfigService) { }
 
   getAll(userId) {
    return this.http.get<Workspace>(`${this.BaseUrl}/getAll/${userId}`)
