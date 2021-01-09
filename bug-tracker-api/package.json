@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "",
-    "start": "nodemon server.js",
+    "start": "node server.js",
     "old": "docker-compose up -d && set CONNECTION=mongodb://localhost:30000/bugDB&& nodemon server.js"
   },
   "keywords": [
