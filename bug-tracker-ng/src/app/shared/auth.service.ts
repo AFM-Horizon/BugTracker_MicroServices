@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
 
 export class AuthService {
   private BaseUrl = 'https://bugtrace.azurewebsites.net/auth';
-  //change
   constructor(
     private http: HttpClient, 
     private localStorageService: LocalStorageService, 
