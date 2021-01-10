@@ -3,10 +3,10 @@ const comment = require('./commentSchemas');
 
 const { commentSchema } = comment;
 
-const tagSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  colour: { type: String, required: true }
-});
+// const tagSchema = new mongoose.Schema({
+//   name: { type: String, required: true },
+//   colour: { type: String, required: true }
+// });
 
 const bugSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -14,7 +14,10 @@ const bugSchema = new mongoose.Schema({
   status: { type: String, required: true },
   workspace: { type: mongoose.Schema.Types.ObjectId, ref: 'workspace' },
   description: { type: String },
-  tags: [tagSchema],
+  tags: [{
+    name: { type: String, required: true },
+    colour: { type: String, required: true }
+  }],
   date: { type: Date, default: Date.now() },
   comments: [commentSchema],
   archived: { type: Boolean, default: false }
