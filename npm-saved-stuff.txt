@@ -62,3 +62,29 @@ project = bug-tracker-api
     <!--<iisnode watchedFiles="web.config;*.js"/>-->
   </system.webServer>
 </configuration>
+
+
+
+<configuration>
+<system.webServer>
+<rewrite>
+    <rules>
+        <rule name="SPA Routes" stopProcessing="true">
+        <!-- match everything by default -->
+        <match url=".*" />
+        <conditions logicalGrouping="MatchAll">
+            <!-- unless its a file -->
+            <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+            <!-- or a directory -->
+            <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+            <!-- or is under the /api directory -->
+            <add input="{REQUEST_URI}" pattern="^/(api)" negate="true" />
+            <!-- list other routes or route prefixes here if you need to handle them server side -->
+        </conditions>
+        <!-- rewrite it to /index.html -->
+        <action type="Rewrite" url="/" />
+        </rule>
+    </rules>
+</rewrite>
+</system.webServer>
+</configuration>
