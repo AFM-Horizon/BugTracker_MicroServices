@@ -37,14 +37,12 @@ module.exports = {
     const token = authHeader && authHeader.split(' ')[1];
 
     if (token == null) {
-      console.log('Token Was Null!');
       return res.sendStatus(401);
     }
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
       if (err) {
-        console.log('looks like token cant be verified!');
-        return res.status(403).send({ error: `Jwt could not be verified - expired! ${err}` });
+        return res.status(403).send({ error: `Jwt could not be verified ${err}` });
       }
       req.user = user;
       next();

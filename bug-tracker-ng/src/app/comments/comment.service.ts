@@ -4,13 +4,14 @@ import { mergeMap, switchMap } from 'rxjs/operators';
 import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
 import { CommentRequest } from '../models/commentRequestModel';
 import { CommentResponse } from './../models/commentResponseModel';
+import { ConfigService } from './../shared/config.service';
 
 @Injectable()
 export class CommentService {
-  private BaseUrl = 'http://localhost:3002/bugs';
+  private BaseUrl = `${this.config.getAPIConnectionBaseUrl()}/bugs`;
   private updateAction$: BehaviorSubject<string> = new BehaviorSubject(null);
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private config: ConfigService) { }
 
   allComments$: Observable<CommentResponse[]> = combineLatest([
     this.updateAction$.asObservable()
