@@ -43,6 +43,7 @@ module.exports = {
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
       if (err) {
+        console.log('looks like token cant be verified!');
         return res.status(403).send({ error: `Jwt could not be verified - expired! ${err}` });
       }
       req.user = user;

@@ -7,7 +7,9 @@ module.exports = (() => {
   database.GetDbInstance();
 
   async function _getAll(bugId) {
+    console.log('Entered repo');
     const bug = await BugModel.findById(bugId);
+    console.log('Query complete trying to return');
     return bug.tags;
   }
 
