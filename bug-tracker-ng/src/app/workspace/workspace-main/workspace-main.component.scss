@@ -1,0 +1,9 @@
+.card-anim:hover {
+  transform: scale(1.02);
+  opacity: 1;
+}
+
+.card-anim {
+  opacity: 0.8;
+  transition: all 0.5s ease;
+}

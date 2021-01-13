@@ -1,24 +1,60 @@
 <app-navbar></app-navbar>
-<div (click)="addWorkspace()" class="button">
-  Add Workspace
-</div>
-<input [(ngModel)]="workspaceName" type="text" class="input">
 
-<ul>
-  <div *ngIf="workspaces$ | async as workspaces">
-    <div *ngFor="let workspace of workspaces">
-      <a (click)="loadBugs(workspace)">
-        <li>
-          {{workspace._id}}
-          {{workspace.name}}
-          {{workspace.owner}}
-        </li>
-      </a>
+<div class="section cards" *ngIf="workspaces$ | async as workspaces">
+  <div class="container">
+    <div class="level">
+      <div class="field has-addons">
+        <div class="control">
+          <input [(ngModel)]="workspaceName" type="text" class="input" />
+        </div>
+        <div class="control">
+          <button (click)="addWorkspace()" class="button is-info">
+            <fa-icon class="icon is-medium mr-1" [icon]="faPlus"></fa-icon>
+            Add Workspace
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-multiline">
+      <div class="column is-one-quarter card-anim" *ngFor="let workspace of workspaces">
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-4by3">
+              <img
+                src="../../../assets/img/background3.jpg"
+                alt="Placeholder image"
+              />
+            </figure>
+          </div>
+          <a (click)="loadBugs(workspace)" class="card-content is-overlay">
+            <p class="title is-3">{{ workspace.name | titlecase }}</p>
+          </a>
+          <footer class="card-footer">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-48x48">
+                  <img
+                    src="https://bulma.io/images/placeholders/96x96.png"
+                    alt="Placeholder image"
+                  />
+                </figure>
+              </div>
+              <div class="media-content">
+                <div class="content">
+                  <p class="subtitle is-6 has-text-dark">
+                    <strong>Owner</strong>
+                    <br />
+                    {{ workspace.owner }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </footer>
+        </div>
+      </div>
     </div>
   </div>
-</ul>
-
-<div>
-  Add User
 </div>
+
+<div>Add User</div>
 <app-user-search></app-user-search>

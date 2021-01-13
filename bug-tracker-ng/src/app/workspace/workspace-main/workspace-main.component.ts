@@ -2,10 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from 'src/app/shared/user.service';
 import { WorkspaceService } from '../workspace.service';
 import { Workspace } from './../../models/workspace';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { WorkspaceStateService } from './../../shared/workspace-state.service';
 import { Router } from '@angular/router';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, takeUntil } from 'rxjs/operators';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-workspace-main',
@@ -15,7 +16,8 @@ import { mergeMap } from 'rxjs/operators';
 export class WorkspaceMainComponent implements OnInit, OnDestroy {
   workspaces$: Observable<Workspace>;
   workspaceName: string;
-  subscriptions: Subscription[] = [];
+  stop$: Subject<void> = new Subject();
+  faPlus = faPlus;
 
   constructor(
     private workspaceService: WorkspaceService,
@@ -24,11 +26,10 @@ export class WorkspaceMainComponent implements OnInit, OnDestroy {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.subscriptions.push(
-      this.userService.getUser().subscribe((user) => {
-        this.getWorkspaces(user.id);
-      })
-    );
+    this.userService.getUser().pipe(takeUntil(this.stop$)).subscribe((user) => {
+      this.getWorkspaces(user.id);
+    });
+    this.workspaceStateService.setState(null);
   }
 
   loadBugs(workspace: Workspace) {
@@ -37,12 +38,13 @@ export class WorkspaceMainComponent implements OnInit, OnDestroy {
   }
 
   getWorkspaces(userId) {
-    this.workspaces$ = this.workspaceService.getAll(userId);
+    this.workspaces$ = this.workspaceService.getAllWorkspaces(userId);
   }
 
   addWorkspace() {
-    const obs = this.userService.getUser()
+    this.userService.getUser()
       .pipe(
+        takeUntil(this.stop$),
         mergeMap((user) => {
           const workspace: Workspace = {
             name: this.workspaceName,
@@ -50,18 +52,11 @@ export class WorkspaceMainComponent implements OnInit, OnDestroy {
           }
           return this.workspaceService.createWorkspace(user.id, workspace);
         })
-      );
-
-    this.subscriptions.push(
-      obs.subscribe()
-    );
+      ).subscribe();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    });
+    this.stop$.next();
+    this.stop$.complete();
   }
 }

@@ -4,13 +4,18 @@
       <img src="../assets/img/BugtraceLogo.gif" alt="" width="150" />
     </a>
     <a class="navbar-item" [routerLink]="['/workspace']">
-      <fa-icon [icon]="faHome" class="fa-2x"></fa-icon>
+      <button class="button is-info">
+        <fa-icon class="mr-1" [icon]="faHome"></fa-icon>
+        <strong>Home</strong>
+      </button>
     </a>
-    <a class="navbar-item ml-4 workspace" [routerLink]="['/workspace']">
-      <div *ngIf="workspace$ | async as workspace">
-        <div>{{workspace.name}}</div>
+    <div class="navbar-item ml-2 workspace" [routerLink]="['/workspace']">
+      <div class="box">
+        <div *ngIf="workspace$ | async as workspace">
+          <div>{{ workspace.name | titlecase }}</div>
+        </div>
       </div>
-    </a>
+    </div>
     <a
       role="button"
       class="navbar-burger"
