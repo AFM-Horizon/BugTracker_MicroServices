@@ -19,7 +19,14 @@ export class UserService {
           return throwError(err);
         }),
         map((token) => {
-          return JSON.parse(atob(token.split('.')[1])) as User;
+          const tokenParse = JSON.parse(atob(token.split('.')[1]));
+          const user: User = {
+            _id: tokenParse.id,
+            username: tokenParse.username,
+            password: null
+          }
+
+          return user;
         })
       );
   }

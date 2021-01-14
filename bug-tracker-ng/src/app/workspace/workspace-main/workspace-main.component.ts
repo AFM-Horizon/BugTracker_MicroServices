@@ -27,7 +27,9 @@ export class WorkspaceMainComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userService.getUser().pipe(takeUntil(this.stop$)).subscribe((user) => {
-      this.getWorkspaces(user.id);
+      console.log(user);
+      
+      this.getWorkspaces(user._id);
     });
     this.workspaceStateService.setState(null);
   }
@@ -37,7 +39,7 @@ export class WorkspaceMainComponent implements OnInit, OnDestroy {
     this.router.navigate(['bugs']);
   }
 
-  getWorkspaces(userId) {
+  getWorkspaces(userId: string) {
     this.workspaces$ = this.workspaceService.getAllWorkspaces(userId);
   }
 
@@ -48,9 +50,9 @@ export class WorkspaceMainComponent implements OnInit, OnDestroy {
         mergeMap((user) => {
           const workspace: Workspace = {
             name: this.workspaceName,
-            owner: user.id
+            owner: user._id
           }
-          return this.workspaceService.createWorkspace(user.id, workspace);
+          return this.workspaceService.createWorkspace(user._id, workspace);
         })
       ).subscribe();
   }

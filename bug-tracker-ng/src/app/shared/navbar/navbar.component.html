@@ -3,44 +3,56 @@
     <a class="navbar-item logo" href="">
       <img src="../assets/img/BugtraceLogo.gif" alt="" width="150" />
     </a>
-    <a class="navbar-item" [routerLink]="['/workspace']">
-      <button class="button is-info">
-        <fa-icon class="mr-1" [icon]="faHome"></fa-icon>
-        <strong>Home</strong>
-      </button>
-    </a>
-    <div class="navbar-item ml-2 workspace" [routerLink]="['/workspace']">
-      <div class="box">
-        <div *ngIf="workspace$ | async as workspace">
-          <div>{{ workspace.name | titlecase }}</div>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" [routerLink]="['/workspace']">
+        <button class="button is-info">
+          <fa-icon class="mr-1" [icon]="faHome"></fa-icon>
+          <strong>Home</strong>
+        </button>
+      </a>
+      <div *ngIf="workspace$ | async as workspace" class="navbar-item mr-2">
+        <div class=" ml-2 workspace">
+          <div class="box">
+            <div>{{ workspace.name | titlecase }}</div>
+          </div>
         </div>
       </div>
+      <div *ngIf="workspace$ | async as workspace" class="navbar-item">
+        <app-user-search [workspace]="workspace"></app-user-search>
+      </div>
+      <div *ngIf="workspace$ | async as workspace" class="navbar-item">
+        <div *ngFor="let user of workspace.permissions">
+          {{user}}
+        </div>
+      </div>
+      <a
+        role="button"
+        class="navbar-burger"
+        aria-label="menu"
+        aria-expanded="false"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    
     </div>
-    <a
-      role="button"
-      class="navbar-burger"
-      aria-label="menu"
-      aria-expanded="false"
-    >
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-
-  <div class="navbar-end" *ngIf="user$ | async as user">
-    <div class="navbar-item mr-2">
-      <div>Hi {{ user.username | titlecase }}!</div>
-    </div>
-
-    <div class="navbar-item mr-2">
-      <div class="buttons">
-        <a
-          (click)="logoutHandler()"
-          class="button is-small is-danger is-outlined"
-        >
-          <fa-icon [icon]="faSignOutAlt" class="mr-1"></fa-icon>Logout
-        </a>
+    <div class="navbar-end" *ngIf="user$ | async as user">
+      <div class="navbar-item mr-2">
+        <div>Hi {{ user.username | titlecase }}!</div>
+      </div>
+  
+      <div class="navbar-item mr-2">
+        <div class="buttons">
+          <a
+            (click)="logoutHandler()"
+            class="button is-small is-danger is-outlined"
+          >
+            <fa-icon [icon]="faSignOutAlt" class="mr-1"></fa-icon>Logout
+          </a>
+        </div>
       </div>
     </div>
   </div>

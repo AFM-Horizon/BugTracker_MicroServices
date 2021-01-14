@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const workspaceSchema = require('./workspaceSchemas');
 const database = require('./database');
 
@@ -24,7 +25,8 @@ module.exports = (() => {
 
   async function _updateWorkspace(id, workspace) {
     return WorkspaceModel.findByIdAndUpdate(
-      id, { $set: workspace }, { upsert: false, new: true }, null
+      // eslint-disable-next-line max-len
+      { _id: mongoose.Types.ObjectId(id) }, { $set: { permissions: workspace.workspace.permissions } }, { upsert: false, new: true, useFindAndModify: false }, null
     );
   }
 

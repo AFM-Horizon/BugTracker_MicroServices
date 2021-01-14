@@ -43,7 +43,7 @@ export class BugEntryComponent implements OnDestroy {
                 const newBug: Bug = {
                   status: this.status,
                   name: this.title,
-                  author: user.id,
+                  author: user._id,
                   description: "Enter a description here...",
                   workspace: state._id
                 }

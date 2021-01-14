@@ -4,10 +4,12 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { UserSearchComponent } from './../workspace/user-search/user-search.component';
 
 @NgModule({
   declarations: [
-    NavbarComponent
+    NavbarComponent,
+    UserSearchComponent
   ],
   imports: [
     FontAwesomeModule,
@@ -18,6 +20,7 @@ import { RouterModule } from '@angular/router';
   ],
   exports: [
     NavbarComponent,
+    UserSearchComponent,
     FormsModule,
     ReactiveFormsModule,
     FontAwesomeModule,

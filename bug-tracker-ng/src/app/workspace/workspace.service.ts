@@ -3,7 +3,7 @@ import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Workspace } from './../models/workspace';
 import { ConfigService } from './../shared/config.service';
-import { switchMap, map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 
 
 @Injectable()
@@ -13,7 +13,7 @@ export class WorkspaceService {
 
   constructor(private http: HttpClient, private config: ConfigService) { }
 
-  private getAll(userId) {
+  private getAll(userId: string) {
     return this.http.get<Workspace>(`${this.BaseUrl}/getAll/${userId}`)
   };
 
@@ -24,7 +24,7 @@ export class WorkspaceService {
       this.workspaceSubject.asObservable()
     ])
       .pipe(
-        switchMap((userId) => {
+        mergeMap(([userId]) => {
           return this.getAll(userId);
         })
       );
@@ -44,9 +44,13 @@ export class WorkspaceService {
     );
   }
 
-  updateWorkspace(id: string, workspaceObject: any): Observable<any> {
+  updateWorkspace(id: string, workspace: any, userId: string): Observable<any> {
     return this.http.patch<any>(`${this.BaseUrl}/${id}`, {
-      workspaceObject
-    });
+      workspace
+    }).pipe(
+      map(() => {
+        this.workspaceSubject.next(userId);
+      })
+    );
   }
 }

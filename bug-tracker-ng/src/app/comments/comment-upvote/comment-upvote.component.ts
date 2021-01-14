@@ -32,16 +32,16 @@ export class CommentUpvoteComponent implements OnInit, OnDestroy {
 
   handleUpvote() {
     let likes: {user: string}[];
-    const res = this.comment.likes.find(x => x.user === this.user.id);
+    const res = this.comment.likes.find(x => x.user === this.user._id);
     
     if (res) {
       likes = this.comment.likes
-      .filter(x => x.user !== this.user.id);
+      .filter(x => x.user !== this.user._id);
       this.isUpvoted = false;       
     }
     else {
       likes = this.comment.likes;
-      likes.push({user: this.user.id});
+      likes.push({user: this.user._id});
       this.isUpvoted = true;
     }
     

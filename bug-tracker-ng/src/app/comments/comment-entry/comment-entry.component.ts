@@ -28,7 +28,7 @@ export class CommentEntryComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscriptions.push(
       this.userService.getUser().subscribe((user) => {
-        this.userId = user.id;
+        this.userId = user._id;
       })
     );
   }

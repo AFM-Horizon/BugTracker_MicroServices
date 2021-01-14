@@ -20,7 +20,12 @@ export class NavbarComponent implements OnDestroy {
     private authService: AuthService, 
     private router: Router, 
     private userService: UserService, 
-    private workspaceStateService: WorkspaceStateService) { }
+    private workspaceStateService: WorkspaceStateService) {
+      this.workspace$.subscribe((work) => {
+        console.log('Cunt');
+        console.log(work);
+      })
+    }
 
   user$ = this.userService.getUser();
   workspace$ = this.workspaceStateService.getState();
