@@ -16,6 +16,7 @@ module.exports = {
     workspaceRepository
       .GetWorkspaceById(req.params.id)
       .then((workspace) => {
+        console.log(workspace);
         res.status(200).send(workspace);
       })
       .catch((err) => {

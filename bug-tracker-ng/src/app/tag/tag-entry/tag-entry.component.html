@@ -1,5 +1,5 @@
 
-<div class="dropdown" [class]="{ 'is-active': isActive }">
+<div class="dropdown" [class]="{ 'is-active': clickSubject$ | async }">
   <div class="dropdown-trigger">
     <button class="button tag is-info" (click)="handleClick()">
       <span class="icon has-text-light">

@@ -1,5 +1,5 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { fromEvent, Observable, of, Subject } from 'rxjs';
+import { Component, Input, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Observable, of, combineLatest, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, mergeMap, switchMap, take, takeUntil, toArray } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from './../../shared/config.service';
@@ -7,29 +7,44 @@ import { User } from 'src/app/models/user';
 import { Workspace } from './../../models/workspace';
 import { WorkspaceService } from './../workspace.service';
 import { UserStatus } from './../../models/user-list';
+import { BaseClickDetectorComponent } from './../../shared/CommonComponents/ClickOusideEventBase.component';
 
 @Component({
   selector: 'app-user-search',
   templateUrl: './user-search.component.html',
   styleUrls: ['./user-search.component.scss']
 })
-export class UserSearchComponent implements OnInit, OnDestroy {
+export class UserSearchComponent extends BaseClickDetectorComponent implements OnInit, OnDestroy {
   users$: Observable<UserStatus[]>
-  stop$: Subject<void> = new Subject();
-  dropdownActive: boolean;
   @Input() workspace: Workspace;
+  searchValue: string;
 
   constructor(
     private http: HttpClient,
     private config: ConfigService,
-    private workspaceService: WorkspaceService
-  ) { }
+    private workspaceService: WorkspaceService,
+    _eref: ElementRef
+  ) {
+    super(_eref);
+  }
 
   ngOnInit(): void {
-    this.users$ = fromEvent(document.getElementById('search'), 'keyup')
+    super.ngOnInit();
+    this.listenToKeyupEvent();
+  }
+
+  listenToKeyupEvent() {
+    this.users$ = combineLatest([
+      fromEvent(document.getElementById('search'), 'keyup'),
+      this.clickSubject$.asObservable()
+    ])
       .pipe(
-        map((event) => {
-          var element = event.target as HTMLInputElement
+        map(([event, isActive]) => {
+          if (!isActive) {
+            this.searchValue = '';
+            return '';
+          }
+          const element = event.target as HTMLInputElement
           return element.value;
         }),
         debounceTime(200),
@@ -43,22 +58,19 @@ export class UserSearchComponent implements OnInit, OnDestroy {
       );
   }
 
-  isValidKeyPressValue(keyPressValue: string) {
+  private isValidKeyPressValue(keyPressValue: string) {
     const filteredVal = keyPressValue.replace(/[^0-9a-z]/gi, '');
     return filteredVal && filteredVal.trim().length !== 0;
   }
 
-  createUserStatusObservable(keyPressValue: string): Observable<UserStatus[]> {
+  private createUserStatusObservable(keyPressValue: string): Observable<UserStatus[]> {
     return this.http.get<User[]>(`${this.config.getAPIConnectionBaseUrl()}/auth/search/${keyPressValue}`).pipe(
       switchMap((users) => {
         let userList: UserStatus[] = [];
         users.forEach(user => {
-          if (this.workspace.permissions.find(p => p === user._id)) {
-            userList.push(new UserStatus(true, user));
-          }
-          else {
-            userList.push(new UserStatus(false, user));
-          }
+          this.workspace.permissions.find(p => p === user._id)
+            ? userList.push(new UserStatus(true, user))
+            : userList.push(new UserStatus(false, user))
         });
         return userList;
       }),
@@ -67,21 +79,12 @@ export class UserSearchComponent implements OnInit, OnDestroy {
     )
   }
 
-  toggleDropdown() {
-    this.dropdownActive = !this.dropdownActive;
-  }
-
   addUser(user: UserStatus): void {
     if (!user.isAdded) {
       this.workspace.permissions.push(user.user._id);
-      this.workspaceService.updateWorkspace(this.workspace._id, this.workspace, user.user._id)
+      this.workspaceService.update(this.workspace._id, this.workspace, user.user._id)
         .pipe(takeUntil(this.stop$)).subscribe();
-      this.dropdownActive = false;
+      this.clickSubject$.next(false);
     }
-  }
-
-  ngOnDestroy(): void {
-    this.stop$.next();
-    this.stop$.complete();
   }
 }

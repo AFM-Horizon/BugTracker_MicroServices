@@ -7,7 +7,7 @@ module.exports = (() => {
   database.GetDbInstance();
 
   async function _getWorkspaceById(id) {
-    return WorkspaceModel.findOne({ id });
+    return WorkspaceModel.findById(id);
   }
 
   async function _getWorkspacesForUser(userId) {

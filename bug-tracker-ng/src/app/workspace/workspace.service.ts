@@ -1,56 +1,64 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Workspace } from './../models/workspace';
 import { ConfigService } from './../shared/config.service';
 import { map, mergeMap } from 'rxjs/operators';
+import { IRepository } from './../interfaces/Irepository';
+import { WorkspaceStateService } from './../shared/workspace-state.service';
 
 
 @Injectable()
-export class WorkspaceService {
+export class WorkspaceService implements IRepository<Workspace, string> {
+
   private BaseUrl = `${this.config.getAPIConnectionBaseUrl()}/workspaces`;
-  private workspaceSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  entityState: BehaviorSubject<Workspace[]> = new BehaviorSubject(null);
 
-  constructor(private http: HttpClient, private config: ConfigService) { }
+  constructor(private http: HttpClient, private config: ConfigService, private workspaceState: WorkspaceStateService) { }
 
-  private getAll(userId: string) {
-    return this.http.get<Workspace>(`${this.BaseUrl}/getAll/${userId}`)
-  };
-
-  getAllWorkspaces(userId: string): Observable<Workspace> {
-    this.workspaceSubject.next(userId);
-
-    return combineLatest([
-      this.workspaceSubject.asObservable()
-    ])
+  getAll(userId: string): Observable<Workspace[]> {
+    return this.http.get<Workspace[]>(`${this.BaseUrl}/getAll/${userId}`)
       .pipe(
-        mergeMap(([userId]) => {
-          return this.getAll(userId);
+        mergeMap((workspaces) => {
+          this.entityState.next(workspaces);
+          return this.entityState.asObservable();
         })
       );
-  }
+  };
 
-  getSingleWorkspace(id: string): Observable<Workspace> {
+  getById(id: string): Observable<Workspace> {
     return this.http.get<Workspace>(`${this.BaseUrl}/getById/${id}`);
   }
 
-  createWorkspace(userId: string, workspace: Workspace): Observable<any> {
+  create(workspace: Workspace, userId: string): any {
     return this.http.post<any>(`${this.BaseUrl}/${userId}`, {
       workspace: workspace
     }).pipe(
-      map(() => {
-        this.workspaceSubject.next(userId);
+      mergeMap(() => {
+        return this.getAll(userId);
       })
     );
   }
 
-  updateWorkspace(id: string, workspace: any, userId: string): Observable<any> {
+  update(id: string, workspace: any, userId: string): any {
     return this.http.patch<any>(`${this.BaseUrl}/${id}`, {
       workspace
     }).pipe(
-      map(() => {
-        this.workspaceSubject.next(userId);
+      mergeMap(() => {
+        return this.getAll(userId).pipe(
+          mergeMap(() => {
+            return this.getById(id).pipe(
+              map((workspace) => {
+                this.workspaceState.setState(workspace);
+              })
+            )
+          })
+        )
       })
     );
+  }
+
+  delete(id: string): any {
+    throw new Error("Method not implemented.");
   }
 }

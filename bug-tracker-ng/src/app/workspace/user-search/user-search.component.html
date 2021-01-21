@@ -1,6 +1,6 @@
-<div class="dropdown" [class]="{ 'is-active': dropdownActive }">
+<div class="dropdown" [class]="{ 'is-active': clickSubject$ | async }">
   <div class="dropdown-trigger">
-    <button (click)="toggleDropdown()" class="button is-info" aria-haspopup="true" aria-controls="dropdown-menu">
+    <button (click)="handleClick()" class="button is-info" aria-haspopup="true" aria-controls="dropdown-menu">
       <strong>Invite</strong>
     </button>
   </div>
@@ -8,11 +8,11 @@
     <div class="dropdown-content">
       <div class="dropdown-item has-text-dark has-text-centered">
         Invite To Workspace
-        <button class="delete ml-4" aria-label="close"></button>
+        <button (click)="handleClick()" class="delete ml-4" aria-label="close"></button>
         <hr>
       </div>
       <div class="dropdown-item">
-        <input id="search" type="text" class="input mb-3" />
+        <input [(ngModel)]="searchValue" id="search" type="text" class="input mb-3" />
         <div *ngIf="users$ | async as users">
           <div *ngFor="let user of users">
             <a (click)="addUser(user)">
@@ -29,7 +29,12 @@
                 <div class="column is-7">
                   <p class="subtitle is-6 has-text-dark">
                     {{ user.user.username }}
-                    {{ user.isAdded }}
+                  </p>
+                  <p *ngIf="user.isAdded" class="has-text-success">
+                    Joined
+                  </p>
+                  <p *ngIf="!user.isAdded" class="has-text-warning">
+                    Invite
                   </p>
                 </div>
               </div>

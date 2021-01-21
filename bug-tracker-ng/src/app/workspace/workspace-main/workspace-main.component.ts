@@ -14,7 +14,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./workspace-main.component.scss']
 })
 export class WorkspaceMainComponent implements OnInit, OnDestroy {
-  workspaces$: Observable<Workspace>;
+  workspaces$: Observable<Workspace[]>;
   workspaceName: string;
   stop$: Subject<void> = new Subject();
   faPlus = faPlus;
@@ -27,8 +27,6 @@ export class WorkspaceMainComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userService.getUser().pipe(takeUntil(this.stop$)).subscribe((user) => {
-      console.log(user);
-      
       this.getWorkspaces(user._id);
     });
     this.workspaceStateService.setState(null);
@@ -40,7 +38,7 @@ export class WorkspaceMainComponent implements OnInit, OnDestroy {
   }
 
   getWorkspaces(userId: string) {
-    this.workspaces$ = this.workspaceService.getAllWorkspaces(userId);
+    this.workspaces$ = this.workspaceService.getAll(userId);
   }
 
   addWorkspace() {
@@ -52,7 +50,7 @@ export class WorkspaceMainComponent implements OnInit, OnDestroy {
             name: this.workspaceName,
             owner: user._id
           }
-          return this.workspaceService.createWorkspace(user._id, workspace);
+          return this.workspaceService.create(workspace, user._id);
         })
       ).subscribe();
   }

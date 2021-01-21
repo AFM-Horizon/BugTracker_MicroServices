@@ -20,7 +20,7 @@
         </div>
       </div>
       <div *ngIf="workspace$ | async as workspace" class="navbar-item">
-        <app-user-search [workspace]="workspace"></app-user-search>
+        <app-user-search [isActive]="false" [workspace]="workspace"></app-user-search>
       </div>
       <div *ngIf="workspace$ | async as workspace" class="navbar-item">
         <div *ngFor="let user of workspace.permissions">

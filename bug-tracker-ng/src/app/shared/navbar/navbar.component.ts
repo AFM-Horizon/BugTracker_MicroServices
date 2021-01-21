@@ -17,19 +17,14 @@ export class NavbarComponent implements OnDestroy {
   logoutSub: Subscription;
 
   constructor(
-    private authService: AuthService, 
-    private router: Router, 
-    private userService: UserService, 
-    private workspaceStateService: WorkspaceStateService) {
-      this.workspace$.subscribe((work) => {
-        console.log('Cunt');
-        console.log(work);
-      })
-    }
+    private authService: AuthService,
+    private router: Router,
+    private userService: UserService,
+    private workspaceStateService: WorkspaceStateService) { }
 
   user$ = this.userService.getUser();
   workspace$ = this.workspaceStateService.getState();
-  
+
   logoutHandler() {
     this.logoutSub = this.authService.logoutUser().subscribe(() => {
       this.router.navigate(['auth/login']);
