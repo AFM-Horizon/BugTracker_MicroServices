@@ -18,22 +18,16 @@
             <a (click)="addUser(user)">
               <div class="columns is-vcentered bt-highlight">
                 <div class="column is-3">
-                  <figure class="image is-32x32">
-                    <img
-                      class="image-round"
-                      src="https://bulma.io/images/placeholders/96x96.png"
-                      alt="Placeholder image"
-                    />
-                  </figure>
+                  <app-user-avatar [firstName]="user.user.username"></app-user-avatar>
                 </div>
-                <div class="column is-7">
-                  <p class="subtitle is-6 has-text-dark">
-                    {{ user.user.username }}
+                <div class="column is-7 bt-align">
+                  <p class="subtitle is-6 has-text-dark mt-2">
+                    {{ user.user.username | titlecase }}
                   </p>
-                  <p *ngIf="user.isAdded" class="has-text-success">
+                  <p *ngIf="user.isAdded" class="has-text-success mb-0">
                     Joined
                   </p>
-                  <p *ngIf="!user.isAdded" class="has-text-warning">
+                  <p *ngIf="!user.isAdded" class="has-text-warning mb-0">
                     Invite
                   </p>
                 </div>

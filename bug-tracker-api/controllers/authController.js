@@ -21,20 +21,20 @@ module.exports = {
         authenticator.authenticate(req.body.username, req.body.password)
           .then((userReturn) => {
             res.status(201);
-            res.json({
+            return res.json({
               message: 'Registration Successful',
               user: userReturn
             });
           })
           .catch((err) => {
-            res.status(500).send({ error: err });
+            return res.status(500).send({ error: err });
           });
       })
       .catch((err) => {
         let errMsg = err;
         if (err.code === 11000) {
           errMsg = 'That Username Is Already Taken';
-          res.status(500).send(errMsg);
+          return res.status(500).send(errMsg);
         }
       });
   },
@@ -52,14 +52,14 @@ module.exports = {
         tokenRepo.InsertToken({ token: refreshToken, userId: user.id })
           .then(() => {
             res.status(200);
-            res.json({ accessToken, refreshToken });
+            return res.json({ accessToken, refreshToken });
           })
           .catch((err) => {
-            res.status(401).send({ error: `token is not being tracked ${err}` });
+            return res.status(401).send({ error: `token is not being tracked ${err}` });
           });
       })
       .catch((err) => {
-        res.status(401).send({ error: err });
+        return res.status(401).send({ error: err });
       });
   },
 
@@ -91,10 +91,21 @@ module.exports = {
     authRepository
       .GetUserByUsername(req.params.username)
       .then((users) => {
-        res.status(200).send(users);
+        return users ? res.status(200).send(users) : res.status(404);
       })
       .catch((err) => {
-        res.status(500).send({ error: err });
+        return res.status(500).send({ error: err });
+      });
+  },
+
+  get_user_by_id: (req, res) => {
+    authRepository
+      .GetUserById(req.params.id)
+      .then((user) => {
+        return user ? res.status(200).send(user) : res.status(404);
+      })
+      .catch((err) => {
+        return res.status(500).send({ error: err });
       });
   }
 };

@@ -12,11 +12,21 @@ module.exports = {
       });
   },
 
+  get_invited_workspaces_by_userid: async (req, res) => {
+    workspaceRepository
+      .GetInvitedWorkspaces(req.params.userId)
+      .then((workspaces) => {
+        res.status(200).send(workspaces);
+      })
+      .catch((err) => {
+        res.status(500).send({ error: err });
+      });
+  },
+
   get_workspace_by_id: async (req, res) => {
     workspaceRepository
       .GetWorkspaceById(req.params.id)
       .then((workspace) => {
-        console.log(workspace);
         res.status(200).send(workspace);
       })
       .catch((err) => {

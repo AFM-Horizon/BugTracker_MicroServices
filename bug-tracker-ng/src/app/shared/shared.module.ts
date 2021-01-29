@@ -5,11 +5,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { UserSearchComponent } from './../workspace/user-search/user-search.component';
+import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 
 @NgModule({
   declarations: [
     NavbarComponent,
-    UserSearchComponent
+    UserSearchComponent,
+    UserAvatarComponent
   ],
   imports: [
     FontAwesomeModule,
@@ -21,6 +23,7 @@ import { UserSearchComponent } from './../workspace/user-search/user-search.comp
   exports: [
     NavbarComponent,
     UserSearchComponent,
+    UserAvatarComponent,
     FormsModule,
     ReactiveFormsModule,
     FontAwesomeModule,

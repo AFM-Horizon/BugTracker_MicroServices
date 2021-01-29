@@ -1,7 +1,35 @@
 <app-navbar></app-navbar>
 
+<div class="section cards" *ngIf="invited$ | async as invited">
+  <div class="container">
+    <h1 class="title is-2">
+      Invited Workspaces
+    </h1>
+    <div class="columns is-multiline">
+      <div class="column is-one-quarter card-anim" *ngFor="let workspace of invited">
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-2by1">
+              <img
+                src="../../../assets/img/background3.jpg"
+                alt="Placeholder image"
+              />
+            </figure>
+          </div>
+          <a (click)="loadBugs(workspace)" class="card-content is-overlay">
+            <p class="title is-3">{{ workspace.name | titlecase }}</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="section cards" *ngIf="workspaces$ | async as workspaces">
   <div class="container">
+    <h1 class="title is-2">
+      My Workspaces
+    </h1>
     <div class="level">
       <div class="field has-addons">
         <div class="control">
@@ -19,7 +47,7 @@
       <div class="column is-one-quarter card-anim" *ngFor="let workspace of workspaces">
         <div class="card">
           <div class="card-image">
-            <figure class="image is-4by3">
+            <figure class="image is-2by1">
               <img
                 src="../../../assets/img/background3.jpg"
                 alt="Placeholder image"
@@ -29,27 +57,6 @@
           <a (click)="loadBugs(workspace)" class="card-content is-overlay">
             <p class="title is-3">{{ workspace.name | titlecase }}</p>
           </a>
-          <footer class="card-footer">
-            <div class="media">
-              <div class="media-left">
-                <figure class="image is-48x48">
-                  <img
-                    src="https://bulma.io/images/placeholders/96x96.png"
-                    alt="Placeholder image"
-                  />
-                </figure>
-              </div>
-              <div class="media-content">
-                <div class="content">
-                  <p class="subtitle is-6 has-text-dark">
-                    <strong>Owner</strong>
-                    <br />
-                    {{ workspace.owner }}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </footer>
         </div>
       </div>
     </div>

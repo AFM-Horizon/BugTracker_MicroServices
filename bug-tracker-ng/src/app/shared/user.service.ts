@@ -1,15 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { TokenService } from './token.service';
 import { User } from '../models/user';
 import { map, catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
-import { AuthMessagingService } from './../auth/auth-messaging.service';
 import { UserMessagingService } from './user-messaging.service';
+import { HttpClient } from '@angular/common/http';
+import { ConfigService } from './config.service';
 
 @Injectable()
 
 export class UserService {
-  constructor(private tokenService: TokenService, private UserMessagingService: UserMessagingService) {}
+  baseUrl: string = this.config.getAPIConnectionBaseUrl();
+
+  constructor(
+    private tokenService: TokenService,
+    private UserMessagingService: UserMessagingService,
+    private http: HttpClient,
+    private config: ConfigService) { }
+
+  getUserById(id: string): Observable<User> {
+    return this.http.get<User>(`${this.baseUrl}/auth/getById/${id}`);
+  }
 
   getUser(): Observable<User> {
     return this.tokenService.getAccessToken()
@@ -30,4 +41,5 @@ export class UserService {
         })
       );
   }
+
 }

@@ -23,12 +23,19 @@ module.exports = (() => {
     return authSchema.userModel.find({ username: RegExp(`^${username}`, 'i') });
   }
 
+  async function _getUserById(id) {
+    return authSchema.userModel.findById(id);
+  }
+
   return {
     GetUserByUsername(username) {
       return _getUserByUsername(username);
     },
     GetUser(userQuery) {
       return _getUser(userQuery);
+    },
+    GetUserById(id) {
+      return _getUserById(id);
     },
     DeleteCollection() {
       return _deleteCollection();

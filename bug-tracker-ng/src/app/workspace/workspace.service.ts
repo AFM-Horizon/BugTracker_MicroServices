@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Workspace } from './../models/workspace';
 import { ConfigService } from './../shared/config.service';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, catchError } from 'rxjs/operators';
 import { IRepository } from './../interfaces/Irepository';
 import { WorkspaceStateService } from './../shared/workspace-state.service';
 
@@ -22,12 +22,23 @@ export class WorkspaceService implements IRepository<Workspace, string> {
         mergeMap((workspaces) => {
           this.entityState.next(workspaces);
           return this.entityState.asObservable();
-        })
+        }),
+        catchError(err => throwError(err))
       );
   };
 
+  getInvited(userId: string): Observable<Workspace[]> {
+    return this.http.get<Workspace[]>(`${this.BaseUrl}/getInvited/${userId}`)
+      .pipe(
+        catchError(err => throwError(err))
+      )
+  }
+
   getById(id: string): Observable<Workspace> {
-    return this.http.get<Workspace>(`${this.BaseUrl}/getById/${id}`);
+    return this.http.get<Workspace>(`${this.BaseUrl}/getById/${id}`)
+      .pipe(
+        catchError(err => throwError(err))
+      )
   }
 
   create(workspace: Workspace, userId: string): any {
@@ -36,7 +47,8 @@ export class WorkspaceService implements IRepository<Workspace, string> {
     }).pipe(
       mergeMap(() => {
         return this.getAll(userId);
-      })
+      }),
+      catchError(err => throwError(err))
     );
   }
 
@@ -54,7 +66,8 @@ export class WorkspaceService implements IRepository<Workspace, string> {
             )
           })
         )
-      })
+      }),
+      catchError(err => throwError(err))
     );
   }
 

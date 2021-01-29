@@ -4,7 +4,6 @@
 
 .logo {
   margin-right: 30px;
-  border-right: 5px solid white;
 }
 
 .navbar-item {
@@ -21,7 +20,14 @@
   font-size: larger;
 }
 
-.box {
+.bt-display-only {
   background-color: rgba($color: white, $alpha: 0.2);
   padding: 8px;
+  color: white;
+  border-color: rgba($color: white, $alpha: 0.2);
+  cursor: auto;
+}
+
+.navbar-menu {
+  background-color: #383838;
 }

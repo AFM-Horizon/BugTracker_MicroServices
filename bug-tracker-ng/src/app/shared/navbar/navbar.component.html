@@ -4,7 +4,7 @@
       <img src="../assets/img/BugtraceLogo.gif" alt="" width="150" />
     </a>
   </div>
-  <div class="navbar-menu">
+  <div class="navbar-menu is-active">
     <div class="navbar-start">
       <a class="navbar-item" [routerLink]="['/workspace']">
         <button class="button is-info">
@@ -13,37 +13,31 @@
         </button>
       </a>
       <div *ngIf="workspace$ | async as workspace" class="navbar-item mr-2">
-        <div class=" ml-2 workspace">
-          <div class="box">
+        <div class="ml-2 workspace">
+          <div class="button bt-display-only">
             <div>{{ workspace.name | titlecase }}</div>
           </div>
         </div>
       </div>
-      <div *ngIf="workspace$ | async as workspace" class="navbar-item">
-        <app-user-search [isActive]="false" [workspace]="workspace"></app-user-search>
+      <div *ngIf="workspace$ | async as workspace" class="navbar-item mr-6">
+        <app-user-search
+          [isActive]="false"
+          [workspace]="workspace"
+        ></app-user-search>
       </div>
-      <div *ngIf="workspace$ | async as workspace" class="navbar-item">
-        <div *ngFor="let user of workspace.permissions">
-          {{user}}
+      <div *ngIf="userList$ | async as users" class="navbar-item">
+        <div class="button bt-display-only">
+          <div *ngFor="let user of users">
+            <app-user-avatar [firstName]="user.username"></app-user-avatar>
+          </div>
         </div>
       </div>
-      <a
-        role="button"
-        class="navbar-burger"
-        aria-label="menu"
-        aria-expanded="false"
-      >
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    
     </div>
     <div class="navbar-end" *ngIf="user$ | async as user">
       <div class="navbar-item mr-2">
         <div>Hi {{ user.username | titlecase }}!</div>
       </div>
-  
+
       <div class="navbar-item mr-2">
         <div class="buttons">
           <a

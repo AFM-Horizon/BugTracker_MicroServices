@@ -14,6 +14,10 @@ module.exports = (() => {
     return WorkspaceModel.find({ owner: userId });
   }
 
+  async function _getInvitedWorkspaces(userId) {
+    return WorkspaceModel.find({ permissions: userId });
+  }
+
   async function _createWorkspace(userId, workspace) {
     const workspaceClone = workspace;
     if (!workspace.owner) {
@@ -42,6 +46,9 @@ module.exports = (() => {
     },
     UpdateWorkspace(id, workspace) {
       return _updateWorkspace(id, workspace);
+    },
+    GetInvitedWorkspaces(userId) {
+      return _getInvitedWorkspaces(userId);
     }
   };
 })();

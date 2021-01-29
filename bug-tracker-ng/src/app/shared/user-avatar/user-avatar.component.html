@@ -1,0 +1,14 @@
+<a>
+  <div class="avatar">
+    <div *ngIf="image">
+      <figure class="image is-32x32">
+        <img class="image-round" src="image" alt="Placeholder image" />
+      </figure>
+    </div>
+    <div *ngIf="!image">
+      <div class="alt-avatar has-text-dark">
+        {{ displayName }}
+      </div>
+    </div>
+  </div>
+</a>
