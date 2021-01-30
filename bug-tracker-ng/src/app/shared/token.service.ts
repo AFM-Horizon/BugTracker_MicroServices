@@ -4,12 +4,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { LocalStorageService } from './local-storage.service';
-import { ConfigService } from './config.service';
+import { environment } from './../../environments/environment';
 
 @Injectable()
 
 export class TokenService {
-  constructor(private http: HttpClient, private router: Router, private localStorageService: LocalStorageService, private config: ConfigService) { }
+  constructor(private http: HttpClient, private router: Router, private localStorageService: LocalStorageService) { }
 
   getAccessToken(): Observable<string> {
     const token = this.localStorageService.getAccessToken();
@@ -46,7 +46,7 @@ export class TokenService {
       return throwError(new Error("No Refresh Token Available"));
     }
 
-    return this.http.post<any>(`${this.config.getAPIConnectionBaseUrl()}/auth/token`, { 
+    return this.http.post<any>(`${environment.apiUrl}/auth/token`, { 
       token: refreshToken 
     }, {headers: new HttpHeaders({skip: 'true'})}).pipe(
       map((data) => {

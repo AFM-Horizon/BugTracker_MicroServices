@@ -2,19 +2,19 @@ import { Injectable, OnInit } from '@angular/core';
 import { Observable, combineLatest, BehaviorSubject, of } from 'rxjs';
 import { Bug } from '../models/bug';
 import { HttpClient } from '@angular/common/http';
-import { switchMap, mergeMap, tap } from 'rxjs/operators';
+import { switchMap, mergeMap } from 'rxjs/operators';
 import { WorkspaceStateService } from './workspace-state.service';
 import { Workspace } from './../models/workspace';
-import { ConfigService } from './config.service';
+import { environment } from './../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BugService implements OnInit {
-  private BaseUrl = `${this.config.getAPIConnectionBaseUrl()}/bugs`;
+  private BaseUrl = `${environment.apiUrl}/bugs`;
 
   private updateAction$: BehaviorSubject<any> = new BehaviorSubject(null);
-  constructor(private http: HttpClient, private workspaceStateService: WorkspaceStateService, private config: ConfigService) { }
+  constructor(private http: HttpClient, private workspaceStateService: WorkspaceStateService) { }
 
   ngOnInit(): void {
     console.log("Bug Componente");

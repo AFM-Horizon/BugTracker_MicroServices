@@ -4,16 +4,16 @@ import { switchMap, mergeMap } from 'rxjs/operators';
 import { Tag } from '../models/tag';
 import { HttpClient } from '@angular/common/http';
 import { BugService } from '../shared/bug.service';
-import { ConfigService } from './../shared/config.service';
+import { environment } from './../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TagServiceService {
-  private BaseUrl = `${this.config.getAPIConnectionBaseUrl()}/tags`;
+  private BaseUrl = `${environment.apiUrl}/tags`;
   private tagAction$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
-  constructor(private http: HttpClient, private bugService: BugService, private config: ConfigService) { }
+  constructor(private http: HttpClient, private bugService: BugService) { }
 
   tags$ = combineLatest([
     this.tagAction$.asObservable()

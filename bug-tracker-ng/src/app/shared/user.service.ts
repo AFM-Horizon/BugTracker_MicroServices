@@ -5,18 +5,17 @@ import { map, catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { UserMessagingService } from './user-messaging.service';
 import { HttpClient } from '@angular/common/http';
-import { ConfigService } from './config.service';
+import { environment } from './../../environments/environment';
 
 @Injectable()
 
 export class UserService {
-  baseUrl: string = this.config.getAPIConnectionBaseUrl();
+  baseUrl: string = environment.apiUrl;
 
   constructor(
     private tokenService: TokenService,
     private UserMessagingService: UserMessagingService,
-    private http: HttpClient,
-    private config: ConfigService) { }
+    private http: HttpClient) { }
 
   getUserById(id: string): Observable<User> {
     return this.http.get<User>(`${this.baseUrl}/auth/getById/${id}`);

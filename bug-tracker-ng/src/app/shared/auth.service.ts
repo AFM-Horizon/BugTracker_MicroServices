@@ -7,18 +7,18 @@ import { TokenResponse } from '../models/tokenResponse';
 import { LocalStorageService } from './local-storage.service';
 import { TokenService } from './token.service';
 import { Router } from '@angular/router';
-import { ConfigService } from './config.service';
+import { environment } from './../../environments/environment';
 
 @Injectable()
 
 export class AuthService {
-  private BaseUrl = `${this.config.getAPIConnectionBaseUrl()}/auth`;
+  private BaseUrl = `${environment.apiUrl}/auth`;
+  
   constructor(
     private http: HttpClient, 
     private localStorageService: LocalStorageService, 
     private tokenService: TokenService,
-    private router: Router,
-    private config: ConfigService) { }
+    private router: Router) { }
 
   getAuthHeader(): Observable<any> {
     return this.tokenService.getAccessToken()
