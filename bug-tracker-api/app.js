@@ -9,7 +9,10 @@ const workspaceRouter = require('./routes/workspace-routes');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: ['https://ambitious-sand-06ac61800.azurestaticapps.net', 'http://localhost:4200'],
+  optionsSuccessStatus: 200
+}));
 app.use(express.json());
 
 app.use(chroma);
