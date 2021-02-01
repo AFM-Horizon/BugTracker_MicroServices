@@ -4,8 +4,8 @@ const authenticator = require('../authentication/authenticator');
 
 const router = express.Router();
 
-router.get('/getAll/:userId', authenticator.authenticateToken, controller.get_workspaces_by_userid);
 router.get('/getInvited/:userId', authenticator.authenticateToken, controller.get_invited_workspaces_by_userid);
+router.get('/getAll/:userId', authenticator.authenticateToken, controller.get_workspaces_by_userid);
 router.get('/getById/:id', authenticator.authenticateToken, controller.get_workspace_by_id);
 router.post('/:userId', authenticator.authenticateToken, controller.create_workspace);
 router.patch('/:id', authenticator.authenticateToken, controller.update_workspace);
