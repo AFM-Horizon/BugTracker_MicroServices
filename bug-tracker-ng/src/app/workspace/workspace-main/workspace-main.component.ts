@@ -2,10 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from 'src/app/shared/user.service';
 import { WorkspaceService } from '../workspace.service';
 import { Workspace } from './../../models/workspace';
-import { Observable, Subject } from 'rxjs';
+import { EMPTY, Observable, Subject } from 'rxjs';
 import { WorkspaceStateService } from './../../shared/workspace-state.service';
 import { Router } from '@angular/router';
-import { mergeMap, takeUntil } from 'rxjs/operators';
+import { mergeMap, takeUntil, catchError } from 'rxjs/operators';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -44,7 +44,11 @@ export class WorkspaceMainComponent implements OnInit, OnDestroy {
   }
 
   getInvitedWorkspaces(userId: string) {
-    this.invited$ = this.workspaceService.getInvited(userId);
+    this.invited$ = this.workspaceService.getInvited(userId).pipe(
+      catchError(() => {
+        return EMPTY;
+      })
+    )
   }
 
   addWorkspace() {
