@@ -10,7 +10,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@vue/eslint-config-airbnb": "^5.1.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "bulma": "^0.9.1",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
