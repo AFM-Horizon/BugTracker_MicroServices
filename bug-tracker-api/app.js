@@ -25,5 +25,8 @@ app.use('/bugs', bugRouter);
 app.use('/tags', tagRouter);
 app.use('/workspaces-alt', workspaceRouterAlt);
 app.use('/workspaces', workspaceRouter);
+app.use('/', (req, res) => {
+  res.status(404).send('Not a valid route');
+});
 
 module.exports = app;
