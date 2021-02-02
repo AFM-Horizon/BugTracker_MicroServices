@@ -91,7 +91,7 @@ module.exports = {
     authRepository
       .GetUserByUsername(req.params.username)
       .then((users) => {
-        return users ? res.status(200).send(users) : res.status(404);
+        return users ? res.status(200).send(users) : res.status(404).send({ error: 'Users was null' });
       })
       .catch((err) => {
         return res.status(500).send({ error: err });
@@ -102,7 +102,7 @@ module.exports = {
     authRepository
       .GetUserById(req.params.id)
       .then((user) => {
-        return user ? res.status(200).send(user) : res.status(404);
+        return user ? res.status(200).send(user) : res.status(404).send({ error: 'User was null' });
       })
       .catch((err) => {
         return res.status(500).send({ error: err });
