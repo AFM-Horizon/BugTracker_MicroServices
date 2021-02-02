@@ -28,7 +28,7 @@ export class WorkspaceService implements IRepository<Workspace, string> {
   };
 
   getInvited(userId: string): Observable<Workspace[]> {
-    return this.http.get<Workspace[]>(`${this.BaseUrl}-alt/getInvitedSpaces/${userId}`)
+    return this.http.get<Workspace[]>(`${this.BaseUrl}/getInvitedSpaces/${userId}`)
       .pipe(
         catchError(err => throwError(err))
       )
