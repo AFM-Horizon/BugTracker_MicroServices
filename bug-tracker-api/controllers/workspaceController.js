@@ -14,15 +14,19 @@ module.exports = {
 
   get_invited_workspaces_by_userid: async (req, res) => {
     console.log('Did I Get Here? Top');
-    workspaceRepository
-      .GetInvitedWorkspaces(req.params.userId)
-      .then((workspaces) => {
-        res.status(200).send(workspaces);
-      })
-      .catch((err) => {
-        console.log('Error caught');
-        res.status(500).send({ error: err });
-      });
+    try {
+      workspaceRepository
+        .GetInvitedWorkspaces(req.params.userId)
+        .then((workspaces) => {
+          res.status(200).send(workspaces);
+        })
+        .catch((err) => {
+          console.log('Error caught');
+          res.status(500).send({ error: err });
+        });
+    } catch (error) {
+      res.sendStatus(422);
+    }
   },
 
   get_workspace_by_id: async (req, res) => {
